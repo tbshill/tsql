@@ -8,7 +8,7 @@ import (
 type (
 	IntDataTypeNode            struct{}
 	BigIntDataTypeNode         struct{}
-	BitDataTyleNode            struct{}
+	BitDataTypeNode            struct{}
 	DecimalDataTypeNode        struct{}
 	MoneyDataTypeNode          struct{}
 	NumericDataTypeNode        struct{}
@@ -29,7 +29,7 @@ type (
 	}
 	TextDataTypeNode     struct{}
 	NcharDataTypeNode    struct{}
-	NtextDataTypeNode    struct{}
+	NTextDataTypeNode    struct{}
 	NVarcharDataTypeNode struct {
 		Capacity int
 	}
@@ -45,7 +45,7 @@ type (
 var (
 	_ Node = &IntDataTypeNode{}
 	_      = &BigIntDataTypeNode{}
-	_      = &BitDataTyleNode{}
+	_      = &BitDataTypeNode{}
 	_      = &DecimalDataTypeNode{}
 	_      = &MoneyDataTypeNode{}
 	_      = &NumericDataTypeNode{}
@@ -64,7 +64,7 @@ var (
 	_      = &CharDataTypeNode{}
 	_      = &TextDataTypeNode{}
 	_      = &NcharDataTypeNode{}
-	_      = &NtextDataTypeNode{}
+	_      = &NTextDataTypeNode{}
 	_      = &NVarcharDataTypeNode{}
 	_      = &BinaryDataTypeNode{}
 	_      = &ImageDataTypeNode{}
@@ -93,12 +93,12 @@ func (i *BigIntDataTypeNode) String() string {
 	return BIGINTLiteral
 }
 
-func (i *BitDataTyleNode) Parse(in string) (string, error) {
+func (i *BitDataTypeNode) Parse(in string) (string, error) {
 	_, rem, err := ExpectBITLiteral(in)
 	return rem, err
 }
 
-func (i *BitDataTyleNode) String() string {
+func (i *BitDataTypeNode) String() string {
 	return BITLiteral
 }
 
@@ -293,12 +293,12 @@ func (i *NcharDataTypeNode) String() string {
 	return NCHARLiteral
 }
 
-func (i *NtextDataTypeNode) Parse(in string) (string, error) {
+func (i *NTextDataTypeNode) Parse(in string) (string, error) {
 	_, rem, err := ExpectNTEXTLiteral(in)
 	return rem, err
 }
 
-func (i *NtextDataTypeNode) String() string {
+func (i *NTextDataTypeNode) String() string {
 	return NTEXTLiteral
 }
 
