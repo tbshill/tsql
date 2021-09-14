@@ -29,4 +29,5 @@ var (
 	ExpectValidIdentifierRunes  = Or(ExpectDigit, ExpectLetter, ExpectUnderscore)
 	ExpectIdentifier            = And(ExpectLetter, Repeat(ExpectValidIdentifierRunes))
 	ExpectOptionalWhitespace    = Optional(ExpectWhiteSpace)
+	ExpectInteger               = Repeat(ExpectDigit)
 )
