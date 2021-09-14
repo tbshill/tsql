@@ -188,4 +188,5 @@ var (
 	ExpectWITHLiteral                           = ExpectCaseInsensitiveString("WITH")
 	ExpectWITHINGROUPLiteral                    = ExpectCaseInsensitiveString("WITHINGROUP")
 	ExpectWRITETEXTLiteral                      = ExpectCaseInsensitiveString("WRITETEXT")
+	ExpectMax                                   = ExpectCaseInsensitiveString("MAX")
 )

@@ -23,17 +23,23 @@ type (
 	DatetimeOffsetDataTypeNode struct{}
 	SmallDatetimeDataTypeNode  struct{}
 	TimeDataTypeNode           struct{}
-	CharDataTypeNode           struct{}
-	VarcharDataTypeNode        struct {
+	CharDataTypeNode           struct {
 		Capacity int
 	}
-	TextDataTypeNode     struct{}
-	NcharDataTypeNode    struct{}
+	VarcharDataTypeNode struct {
+		Capacity int
+	}
+	TextDataTypeNode  struct{}
+	NCharDataTypeNode struct {
+		Capacity int
+	}
 	NTextDataTypeNode    struct{}
 	NVarcharDataTypeNode struct {
 		Capacity int
 	}
-	BinaryDataTypeNode           struct{}
+	BinaryDataTypeNode struct {
+		Capacity int
+	}
 	ImageDataTypeNode            struct{}
 	VarBinaryDataTypeNode        struct{}
 	RowVersionDataTypeNode       struct{}
@@ -63,7 +69,7 @@ var (
 	_      = &VarcharDataTypeNode{}
 	_      = &CharDataTypeNode{}
 	_      = &TextDataTypeNode{}
-	_      = &NcharDataTypeNode{}
+	_      = &NCharDataTypeNode{}
 	_      = &NTextDataTypeNode{}
 	_      = &NVarcharDataTypeNode{}
 	_      = &BinaryDataTypeNode{}
@@ -229,20 +235,11 @@ func (i *TimeDataTypeNode) String() string {
 }
 
 func (i *CharDataTypeNode) Parse(in string) (string, error) {
-	_, rem, err := ExpectCHARLiteral(in)
-	return rem, err
-}
-
-func (i *CharDataTypeNode) String() string {
-	return CHARLiteral
-}
-
-func (i *VarcharDataTypeNode) Parse(in string) (string, error) {
 	var tok, rem string
 	var err error
 
 	// VARCHAR ( <END>
-	start := And(ExpectVARCHARLiteral,
+	start := And(ExpectCHARLiteral,
 		ExpectOptionalWhitespace,
 		ExpectParenLeft,
 		ExpectOptionalWhitespace)
@@ -270,7 +267,52 @@ func (i *VarcharDataTypeNode) Parse(in string) (string, error) {
 	return rem, err
 }
 
+func (i *CharDataTypeNode) String() string {
+	capStr := strconv.Itoa(i.Capacity)
+	return CHARLiteral + "(" + capStr + ")"
+}
+
+func (i *VarcharDataTypeNode) Parse(in string) (string, error) {
+	var tok, rem string
+	var err error
+
+	// VARCHAR ( <END>
+	start := And(ExpectVARCHARLiteral,
+		ExpectOptionalWhitespace,
+		ExpectParenLeft,
+		ExpectOptionalWhitespace)
+
+	if _, rem, err = start(in); err != nil {
+		return in, err
+	}
+
+	if tok, rem, err = ExpectMax(rem); err != nil {
+		if tok, rem, err = ExpectInteger(rem); err != nil {
+			return in, err
+		}
+		if i.Capacity, err = strconv.Atoi(tok); err != nil {
+			return in, err
+		}
+	} else {
+		i.Capacity = MaxVarcharCapacity
+	}
+
+	// <start> )
+	end := And(ExpectOptionalWhitespace,
+		ExpectParenRight)
+
+	if _, rem, err = end(rem); err != nil {
+		return in, err
+	}
+
+	return rem, err
+}
+
 func (i *VarcharDataTypeNode) String() string {
+	if i.Capacity == MaxVarcharCapacity {
+		return VARCHARLiteral + "(" + "MAX" + ")"
+	}
+
 	capStr := strconv.Itoa(i.Capacity)
 	return VARCHARLiteral + "(" + capStr + ")"
 }
@@ -284,13 +326,42 @@ func (i *TextDataTypeNode) String() string {
 	return TEXTLiteral
 }
 
-func (i *NcharDataTypeNode) Parse(in string) (string, error) {
-	_, rem, err := ExpectNCHARLiteral(in)
+func (i *NCharDataTypeNode) Parse(in string) (string, error) {
+	var tok, rem string
+	var err error
+
+	// VARCHAR ( <END>
+	start := And(ExpectNCHARLiteral,
+		ExpectOptionalWhitespace,
+		ExpectParenLeft,
+		ExpectOptionalWhitespace)
+
+	if _, rem, err = start(in); err != nil {
+		return in, err
+	}
+
+	if tok, rem, err = ExpectInteger(rem); err != nil {
+		return in, err
+	}
+
+	if i.Capacity, err = strconv.Atoi(tok); err != nil {
+		return in, err
+	}
+
+	// <start> )
+	end := And(ExpectOptionalWhitespace,
+		ExpectParenRight)
+
+	if _, rem, err = end(rem); err != nil {
+		return in, err
+	}
+
 	return rem, err
 }
 
-func (i *NcharDataTypeNode) String() string {
-	return NCHARLiteral
+func (i *NCharDataTypeNode) String() string {
+	capStr := strconv.Itoa(i.Capacity)
+	return NCHARLiteral + "(" + capStr + ")"
 }
 
 func (i *NTextDataTypeNode) Parse(in string) (string, error) {
@@ -303,12 +374,47 @@ func (i *NTextDataTypeNode) String() string {
 }
 
 func (i *NVarcharDataTypeNode) Parse(in string) (string, error) {
-	_, rem, err := ExpectNVARCHARLiteral(in)
+	var tok, rem string
+	var err error
+
+	// VARCHAR ( <END>
+	start := And(ExpectNVARCHARLiteral,
+		ExpectOptionalWhitespace,
+		ExpectParenLeft,
+		ExpectOptionalWhitespace)
+
+	if _, rem, err = start(in); err != nil {
+		return in, err
+	}
+
+	if tok, rem, err = ExpectMax(rem); err != nil {
+		if tok, rem, err = ExpectInteger(rem); err != nil {
+			return in, err
+		}
+		if i.Capacity, err = strconv.Atoi(tok); err != nil {
+			return in, err
+		}
+	} else {
+		i.Capacity = MaxVarcharCapacity
+	}
+
+	// <start> )
+	end := And(ExpectOptionalWhitespace,
+		ExpectParenRight)
+
+	if _, rem, err = end(rem); err != nil {
+		return in, err
+	}
+
 	return rem, err
 }
 
 func (i *NVarcharDataTypeNode) String() string {
-	return NVARCHARLiteral
+	if i.Capacity == MaxVarcharCapacity {
+		return NVARCHARLiteral + "(" + "MAX" + ")"
+	}
+	capStr := strconv.Itoa(i.Capacity)
+	return NVARCHARLiteral + "(" + capStr + ")"
 }
 
 func (i *BinaryDataTypeNode) Parse(in string) (string, error) {
