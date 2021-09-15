@@ -1,6 +1,6 @@
 package tsql
 
-import parsec "github.com/tbshill/goparsec"
+import . "github.com/tbshill/goparsec"
 
 var _ Node = &CreateObjectNode{}
 
@@ -16,7 +16,7 @@ func (n *CreateObjectNode) Parse(in string) (string, error) {
 		return in, err
 	}
 
-	if _, rem, err = parsec.ExpectWhiteSpace(rem); err != nil {
+	if _, rem, err = ExpectWhiteSpace(rem); err != nil {
 		return in, err
 	}
 
