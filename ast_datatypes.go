@@ -1,7 +1,7 @@
 package tsql
 
 import (
-	. "github.com/tbshill/goparsec"
+	"github.com/tbshill/goparsec"
 	"strconv"
 )
 
@@ -239,7 +239,7 @@ func (i *CharDataTypeNode) Parse(in string) (string, error) {
 	var err error
 
 	// VARCHAR ( <END>
-	start := And(ExpectCHARLiteral,
+	start := goparsec.And(ExpectCHARLiteral,
 		ExpectOptionalWhitespace,
 		ExpectParenLeft,
 		ExpectOptionalWhitespace)
@@ -257,7 +257,7 @@ func (i *CharDataTypeNode) Parse(in string) (string, error) {
 	}
 
 	// <start> )
-	end := And(ExpectOptionalWhitespace,
+	end := goparsec.And(ExpectOptionalWhitespace,
 		ExpectParenRight)
 
 	if _, rem, err = end(rem); err != nil {
@@ -277,7 +277,7 @@ func (i *VarcharDataTypeNode) Parse(in string) (string, error) {
 	var err error
 
 	// VARCHAR ( <END>
-	start := And(ExpectVARCHARLiteral,
+	start := goparsec.And(ExpectVARCHARLiteral,
 		ExpectOptionalWhitespace,
 		ExpectParenLeft,
 		ExpectOptionalWhitespace)
@@ -298,7 +298,7 @@ func (i *VarcharDataTypeNode) Parse(in string) (string, error) {
 	}
 
 	// <start> )
-	end := And(ExpectOptionalWhitespace,
+	end := goparsec.And(ExpectOptionalWhitespace,
 		ExpectParenRight)
 
 	if _, rem, err = end(rem); err != nil {
@@ -331,7 +331,7 @@ func (i *NCharDataTypeNode) Parse(in string) (string, error) {
 	var err error
 
 	// VARCHAR ( <END>
-	start := And(ExpectNCHARLiteral,
+	start := goparsec.And(ExpectNCHARLiteral,
 		ExpectOptionalWhitespace,
 		ExpectParenLeft,
 		ExpectOptionalWhitespace)
@@ -349,7 +349,7 @@ func (i *NCharDataTypeNode) Parse(in string) (string, error) {
 	}
 
 	// <start> )
-	end := And(ExpectOptionalWhitespace,
+	end := goparsec.And(ExpectOptionalWhitespace,
 		ExpectParenRight)
 
 	if _, rem, err = end(rem); err != nil {
@@ -378,7 +378,7 @@ func (i *NVarcharDataTypeNode) Parse(in string) (string, error) {
 	var err error
 
 	// VARCHAR ( <END>
-	start := And(ExpectNVARCHARLiteral,
+	start := goparsec.And(ExpectNVARCHARLiteral,
 		ExpectOptionalWhitespace,
 		ExpectParenLeft,
 		ExpectOptionalWhitespace)
@@ -399,7 +399,7 @@ func (i *NVarcharDataTypeNode) Parse(in string) (string, error) {
 	}
 
 	// <start> )
-	end := And(ExpectOptionalWhitespace,
+	end := goparsec.And(ExpectOptionalWhitespace,
 		ExpectParenRight)
 
 	if _, rem, err = end(rem); err != nil {

@@ -18,3 +18,13 @@ func sqBrackets(s string) string {
 	}
 	return "[" + s + "]"
 }
+
+func ParseStatement(in string) (Node, error) {
+	p := new(StatementNode)
+	_, err := p.Parse(in)
+	if err != nil {
+		return nil, err
+	}
+
+	return p, nil
+}

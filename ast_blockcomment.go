@@ -1,6 +1,6 @@
 package tsql
 
-import . "github.com/tbshill/goparsec"
+import "github.com/tbshill/goparsec"
 
 var _ Node = &BlockCommentNode{}
 
@@ -16,7 +16,7 @@ func (b *BlockCommentNode) Parse(in string) (string, error) {
 		return in, err
 	}
 
-	if b.Text, rem, err = ExpectUntil(ExpectMultiLineCommentEnd)(rem); err != nil {
+	if b.Text, rem, err = goparsec.ExpectUntil(ExpectMultiLineCommentEnd)(rem); err != nil {
 		return in, err
 	}
 
